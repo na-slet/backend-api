@@ -1,2 +1,2 @@
-from get_settings import get_fastapi_settings, get_postgres_settings
+from .get_settings import get_fastapi_settings
 
