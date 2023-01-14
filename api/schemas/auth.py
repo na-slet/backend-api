@@ -15,6 +15,7 @@ class UserRegister(BaseModel):
     email: str = Form(..., description='Почта пользователя')
     password: str = Form(..., description='Пароль пользователя')
     avatar: UploadFile = File(..., description='Аватарка пользователя')
+    city: str = Form(..., description='Город пользователя')
     tg_link: str = Form(..., description='Ссылка на Telegram пользователя')
     birth_date: date = Form(..., description='Дата рождения пользователя')
 

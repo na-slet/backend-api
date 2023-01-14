@@ -7,6 +7,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from api.configs.get_settings import get_fastapi_settings
+from api.schemas.common import TokenIn
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
@@ -48,10 +49,10 @@ def verify_token(token: str, credentails_exception) -> str:
     return login
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
+async def get_user_identity(token_in: TokenIn = Depends()) -> str:
     credentails_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid authentication credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    return verify_token(token, credentails_exception)
+    return verify_token(token_in.access_token, credentails_exception)

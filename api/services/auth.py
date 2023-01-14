@@ -18,6 +18,7 @@ async def add_new_user(user_register: UserRegister, credential_type: str, sessio
             gender=user_register.gender,
             phone=user_register.phone,
             email=user_register.email,
+            city=user_register.city,
             avatar_id=None, # TODO: добавить загрузку фоток
             tg_link=user_register.tg_link,
             birth_date=user_register.birth_date
