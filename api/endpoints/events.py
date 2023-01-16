@@ -12,27 +12,25 @@ from migrations.database.connection.session import get_session
 from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
-from api.schemas.users import UserProfile
+from api.schemas.events import EventOut, EventSearch, UserEvent
 
 
 user_router = APIRouter(tags=["Функции пользователя"])
 
 
-@user_router.put("/user", response_model=SuccessfullResponse)
-async def update_user(
+@user_router.get("/events", response_model=list[EventOut])
+async def get_(
     session: AsyncSession = Depends(get_session),
-    user_profile: UserProfile = Depends(),
+    event_search: EventSearch = Depends(),
     identity: str = Depends(get_user_identity)
-) -> SuccessfullResponse:
-    user = await get_user_by_identity(identity, session)
-    await update_user_profile(user_profile,user,session)
-    return SuccessfullResponse()
+) -> list[EventOut]:
+    pass
 
 
-@user_router.get("/user", response_model=UserProfile)
-async def get_user(
+@user_router.get("/user/events", response_model=list[EventOut])
+async def user_login(
     session: AsyncSession = Depends(get_session),
+    user_event: UserEvent = Depends(),
     identity: str = Depends(get_user_identity)
-) -> UserProfile:
-    user = await get_user_by_identity(identity, session)
-    return UserProfile.from_orm(user)
+) -> list[EventOut]:
+    pass

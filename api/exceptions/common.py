@@ -26,6 +26,7 @@ class InternalServerError(CommonException):
             status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal server error", error
         )
 
+
 class ForbiddenException(CommonException):
     def __init__(self, message: str) -> None:
         super().__init__(status.HTTP_403_FORBIDDEN, message, None)
