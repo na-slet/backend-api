@@ -18,4 +18,4 @@ build:
 run-docker:
 	docker container stop na-slet-client-api || true
 	docker container rm na-slet-client-api || true
-	docker run --name na-slet-client-api -p ${FASTAPI_PORT}:${FASTAPI_PORT} na-slet-client-api
+	docker run --name -d na-slet-client-api -p ${FASTAPI_PORT}:${FASTAPI_PORT} na-slet-client-api
