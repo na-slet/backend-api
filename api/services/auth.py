@@ -3,25 +3,17 @@ from migrations.database.models import Users, Credentials
 from migrations.database.models.credentials import CredentialTypes
 
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
-
-from api.schemas.auth import UserRegister, UserLoginBasic
+from api.schemas.auth import UserUpdate, UserRegister, UserLoginBasic
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, and_, or_
+from sqlalchemy import func
+from sqlalchemy import select, insert, and_, or_, update
 from sqlalchemy.exc import IntegrityError
 
 
 async def add_new_user(user_register: UserRegister, credential_type: str, session: AsyncSession) -> None:
     try:
         query = insert(Users).values(
-            first_name=user_register.first_name,
-            last_name=user_register.last_name,
-            gender=user_register.gender,
-            phone=user_register.phone,
             email=user_register.email,
-            city=user_register.city,
-            avatar_id=None, # TODO: добавить загрузку фоток
-            tg_link=user_register.tg_link,
-            birth_date=user_register.birth_date
         ).returning(Users.id)
         user_id = (await session.execute(query)).scalars().first()
         query = insert(Credentials).values(

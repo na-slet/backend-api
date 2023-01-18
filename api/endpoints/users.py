@@ -12,6 +12,7 @@ from migrations.database.connection.session import get_session
 from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
+from api.schemas.auth import UserUpdate
 from api.schemas.users import UserProfile
 
 

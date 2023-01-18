@@ -18,7 +18,7 @@ auth_router = APIRouter(tags=["Аутентификация"])
 
 
 @auth_router.post("/user/register", response_model=SuccessfullResponse)
-async def user_register(
+async def register_new_user(
     session: AsyncSession = Depends(get_session),
     user_register: UserRegister = Depends()
 ) -> SuccessfullResponse:
@@ -28,7 +28,7 @@ async def user_register(
 
 
 @auth_router.post("/user/login", response_model=TokenOut)
-async def user_login(user_login: UserLoginBasic = Depends(),
+async def log_user_in(user_login: UserLoginBasic = Depends(),
                      session: AsyncSession = Depends(get_session)) -> TokenOut:
     credential = await get_user_by_email_or_phone(user_login, session)
     if not verify_password(user_login.password, credential.value):

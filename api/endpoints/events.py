@@ -15,10 +15,10 @@ from api.services.users import get_user_by_identity, update_user_profile
 from api.schemas.events import EventOut, EventSearch, UserEvent
 
 
-user_router = APIRouter(tags=["Функции пользователя"])
+event_router = APIRouter(tags=["Функции пользователя"])
 
 
-@user_router.get("/events", response_model=list[EventOut])
+@event_router.get("/events", response_model=list[EventOut])
 async def get_(
     session: AsyncSession = Depends(get_session),
     event_search: EventSearch = Depends(),
@@ -27,7 +27,7 @@ async def get_(
     pass
 
 
-@user_router.get("/user/events", response_model=list[EventOut])
+@event_router.get("/user/events", response_model=list[EventOut])
 async def user_login(
     session: AsyncSession = Depends(get_session),
     user_event: UserEvent = Depends(),
