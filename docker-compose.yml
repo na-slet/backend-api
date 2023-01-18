@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    # depends_on:
-    #   - postgresql
     networks:
       - na-slet
 
@@ -16,5 +14,3 @@ networks:
   na-slet:
     name: na-slet-network
     external: true
-
-    

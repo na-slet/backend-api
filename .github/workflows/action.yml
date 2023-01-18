@@ -20,6 +20,8 @@ jobs:
       - uses: actions/checkout@v2
       - run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
       - run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
+      - name: Pull latest changes
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-client-api; git pull'
       - name: Set up environment
         run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-client-api; echo -e "${{ secrets.ENV_CONTENTS }}" > .env'
       - name: Build
