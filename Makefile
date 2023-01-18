@@ -20,4 +20,4 @@ down:
 
 run-docker:
 	docker container rm na-slet-client-api || true
-	docker run --name -d na-slet-client-api -p ${FASTAPI_PORT}:${FASTAPI_PORT} na-slet-client-api
+	docker run --name  na-slet-client-api -d -p ${FASTAPI_PORT}:${FASTAPI_PORT} na-slet-client-api
