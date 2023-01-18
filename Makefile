@@ -15,7 +15,9 @@ run:
 build:
 	docker build -t na-slet-client-api --no-cache .
 
-run-docker:
+down:
 	docker container stop na-slet-client-api || true
+
+run-docker:
 	docker container rm na-slet-client-api || true
 	docker run --name -d na-slet-client-api -p ${FASTAPI_PORT}:${FASTAPI_PORT} na-slet-client-api
