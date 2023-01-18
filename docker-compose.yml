@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  client-api:
+    container_name: na-slet-client-api
+    ports:
+      - "3000:3000"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    # depends_on:
+    #   - postgresql
+    networks:
+      - na-slet
+
+networks:
+  na-slet:
+    name: na-slet-network
+    external: true
+
+    
