@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  client-api:
+    container_name: na-slet-client-api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - na-slet
+
+networks:
+  na-slet:
+    name: na-slet-network
+    external: true
