@@ -9,6 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from api.endpoints.auth import auth_router
 from api.endpoints.users import user_router
+from api.endpoints.unions import union_router
 
 app = FastAPI(title="Na-slet client API")
 origins = ["*"]
@@ -65,3 +66,4 @@ app.add_middleware(
 )
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(union_router)

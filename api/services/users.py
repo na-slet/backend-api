@@ -36,10 +36,12 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
             last_name=func.coalesce(user_profile.last_name, Users.last_name),
             gender=func.coalesce(user_profile.gender, Users.gender),
             phone=func.coalesce(user_profile.phone, Users.phone),
+            parent_phone=func.coalesce(user.parent_phone, Users.parent_phone),
             email=func.coalesce(user_profile.email, Users.email),
             avatar_id=func.coalesce(user_profile.avatar, Users.avatar_id),
             city=func.coalesce(user_profile.city, Users.city),
             tg_link=func.coalesce(user_profile.tg_link, Users.tg_link),
+            union_id=func.coalesce(user_profile.union_id, Users.union_id),
             birth_date=func.coalesce(user_profile.birth_date, Users.birth_date),
         ).where(
             Users.id == user.id
@@ -48,5 +50,5 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
         await session.commit()
     except IntegrityError as e:
         await session.rollback()
-        raise InternalServerError(e) from e
+        raise NotFoundException('Union not found') from e
 
