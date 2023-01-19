@@ -47,5 +47,6 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
         await session.execute(query)
         await session.commit()
     except IntegrityError as e:
+        await session.rollback()
         raise InternalServerError(e) from e
 
