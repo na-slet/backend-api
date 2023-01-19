@@ -14,6 +14,7 @@ async def add_new_user(user_register: UserRegister, credential_type: str, sessio
     try:
         query = insert(Users).values(
             email=user_register.email,
+            **({'role': user_register.role} if user_register.role else {})
         ).returning(Users.id)
         user_id = (await session.execute(query)).scalars().first()
         query = insert(Credentials).values(

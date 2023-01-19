@@ -6,6 +6,7 @@ from fastapi import Depends, File, UploadFile, Form
 from pydantic import BaseModel, Field
 from migrations.database.models.users import Genders
 from migrations.database.models.credentials import CredentialTypes
+from migrations.database.models.users import Roles
 
 
 class UserUpdate(BaseModel):
@@ -22,6 +23,7 @@ class UserUpdate(BaseModel):
 class UserRegister(BaseModel):
     email: str = Form(..., description='Email пользователя')
     password: str = Form(..., description='Пароль пользователя')
+    role: Roles = Form(None, description='Роль пользователя')
 
 
 class UserLoginBasic(BaseModel):
