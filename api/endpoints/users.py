@@ -13,7 +13,7 @@ from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
 from api.schemas.auth import UserUpdate
-from api.schemas.users import UserProfile
+from api.schemas.users import UserProfile, UserOut
 
 
 user_router = APIRouter(tags=["Функции пользователя"])
@@ -30,10 +30,10 @@ async def update_user(
     return SuccessfullResponse()
 
 
-@user_router.get("/user", response_model=UserProfile)
+@user_router.get("/user", response_model=UserOut)
 async def get_user(
     session: AsyncSession = Depends(get_session),
     identity: str = Depends(get_user_identity)
-) -> UserProfile:
+) -> UserOut:
     user = await get_user_by_identity(identity, session)
-    return UserProfile.from_orm(user)
+    return UserOut.from_orm(user)

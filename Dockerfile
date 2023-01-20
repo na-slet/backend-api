@@ -5,6 +5,7 @@ RUN apk add --no-cache poetry
 COPY poetry.lock pyproject.toml ./
 RUN poetry install || true
 COPY ./api ./api
+COPY ./static ./static
 COPY ./migrations ./migrations
 COPY ./.env ./.env
 COPY ./Makefile ./Makefile

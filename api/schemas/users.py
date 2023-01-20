@@ -22,3 +22,20 @@ class UserProfile(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserOut(BaseModel):
+    first_name: str = Field(None, description='Имя пользователя')
+    last_name: str = Field(None, description='Фамилия пользователя')
+    gender: Genders = Field(None, description='Пол пользователя')
+    phone: str = Field(None, description='Телефон пользователя')
+    parent_phone: str = Field(None, description='Телефон родителя')
+    email: str = Field(None, description='Почта пользователя')
+    avatar_id: str = Field(None, description='Аватарка пользователя')
+    city: str = Field(None, description='Город пользователя')
+    tg_link: str = Field(None, description='Ссылка на Telegram пользователя')
+    birth_date: date = Field(None, description='Дата рождения пользователя')
+    union_id: UUID = Field(None, description='UUID объединения')
+
+    class Config:
+        orm_mode = True

@@ -1,7 +1,7 @@
 import sqlalchemy
-
+import os
 from migrations.database.models import Users, Events, Participations
-
+import hashlib
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
 
 from api.schemas.users import UserProfile
@@ -55,9 +55,14 @@ async def user_participate(event_in: EventIn, user: Users, session: AsyncSession
 
 
 async def user_payment_send(payment: PaymentPhoto, user: Users, session: AsyncSession) -> None:
+    data = payment.payment.file.read()
+    filetype = os.path.splitext(payment.payment.filename)[-1]
+    fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
+    with open(fname, mode='wb+') as f:
+        f.write(data)
     try:
         query = update(Participations).values(
-            payment_id=None
+            payment_id=fname
         ).where(
             Participations.user_id == str(user.id),
             Participations.event_id == str(payment.event_id),

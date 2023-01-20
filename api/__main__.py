@@ -1,6 +1,7 @@
 from time import ctime, perf_counter
 
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
 from api.exceptions.common import CommonException, InternalServerError
@@ -69,3 +70,11 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(union_router)
 app.include_router(event_router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+app.mount('/static', StaticFiles(directory='static'), name='static')
