@@ -12,25 +12,49 @@ from migrations.database.connection.session import get_session
 from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
-from api.schemas.events import EventOut, EventSearch, UserEvent
+from api.schemas.events import EventOut, EventSearch, PaymentPhoto, UserParticipation, EventIn
+from api.services.events import search_events, get_participations, user_participate, user_payment_send
+from api.utils.formatter import serialize_models
 
 
 event_router = APIRouter(tags=["Функции пользователя"])
 
 
 @event_router.get("/events", response_model=list[EventOut])
-async def get_(
+async def search_for_events(
     session: AsyncSession = Depends(get_session),
     event_search: EventSearch = Depends(),
-    identity: str = Depends(get_user_identity)
 ) -> list[EventOut]:
-    pass
+    events = await search_events(event_search, session)
+    return serialize_models(events, EventOut)
 
 
-@event_router.get("/user/events", response_model=list[EventOut])
-async def user_login(
+@event_router.get("/user/events", response_model=list[UserParticipation])
+async def get_user_participation(
     session: AsyncSession = Depends(get_session),
-    user_event: UserEvent = Depends(),
     identity: str = Depends(get_user_identity)
 ) -> list[EventOut]:
-    pass
+    participations = await get_participations(identity, session)
+    return serialize_models(participations, UserParticipation)
+
+
+@event_router.post('/event', response_model=SuccessfullResponse)
+async def participate_in_event(
+        session: AsyncSession = Depends(get_session),
+        event_in: EventIn = Depends(),
+        identity: str = Depends(get_user_identity)
+) -> SuccessfullResponse:
+    user = await get_user_by_identity(identity, session)
+    await user_participate(event_in, user, session)
+    return SuccessfullResponse()
+
+
+@event_router.post('/user/event/payment', response_model=SuccessfullResponse)
+async def send_payment_photo(
+    session: AsyncSession = Depends(get_session),
+    payment: PaymentPhoto = Depends(),
+    identity: str = Depends(get_user_identity)
+) -> SuccessfullResponse:
+    user = await get_user_by_identity(identity, session)
+    await user_payment_send(payment, user, session)
+    return SuccessfullResponse()
