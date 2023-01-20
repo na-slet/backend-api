@@ -24,8 +24,9 @@ async def add_new_user(user_register: UserRegister, credential_type: str, sessio
         )
         await session.execute(query)
         await session.commit()
-    except IntegrityError:
+    except IntegrityError as e:
         await session.rollback()
+        raise BadRequest("User already exist", e) from e
 
 
 async def get_user_by_email_or_phone(user_login: UserLoginBasic, session: AsyncSession) -> Credentials:
