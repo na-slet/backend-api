@@ -12,6 +12,7 @@ from api.endpoints.auth import auth_router
 from api.endpoints.users import user_router
 from api.endpoints.unions import union_router
 from api.endpoints.events import event_router
+from api.endpoints.colors import color_router
 
 app = FastAPI(title="Na-slet client API")
 origins = ["*"]
@@ -70,6 +71,7 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(union_router)
 app.include_router(event_router)
+app.include_router(color_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
