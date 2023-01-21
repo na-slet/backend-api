@@ -16,14 +16,14 @@ from api.schemas.auth import UserUpdate
 from api.schemas.users import UserProfile, UserOut
 
 
-user_router = APIRouter(tags=["Функции пользователя"])
+user_router = APIRouter(tags=["Функции пользователей"])
 
 
 @user_router.put("/user", response_model=SuccessfullResponse)
 async def update_user(
+    user_profile: UserProfile,
+    identity: str = Depends(get_user_identity),
     session: AsyncSession = Depends(get_session),
-    user_profile: UserProfile = Depends(),
-    identity: str = Depends(get_user_identity)
 ) -> SuccessfullResponse:
     user = await get_user_by_identity(identity, session)
     await update_user_profile(user_profile,user,session)

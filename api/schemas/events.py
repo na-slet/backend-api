@@ -5,7 +5,8 @@ from datetime import datetime, date
 from fastapi import Depends, File, UploadFile, Form
 from pydantic import BaseModel, Field
 from migrations.database.models.participations import ParticipationStages
-from migrations.database.models.events import CategoryType, EventType
+from migrations.database.models.events import CategoryType, EventType, LogoVariant
+from api.schemas.unions import Union
 
 
 class EventSearch(BaseModel):
@@ -27,6 +28,7 @@ class EventOut(BaseModel):
     name: str = Field(None, description='Название слёта')
     description: str = Field(None, description='Описание слёта')
     short_description: str = Field(None, description='Короткое описание слёта')
+    logo_variant: LogoVariant = Field(None, description='Вариант логотип')
     city: str = Field(None, description='Локация слёта')
     reg_end_date: datetime = Field(None, description='Окончание регистрации')
     start_date: datetime = Field(None, description='Начало слёта')
@@ -41,10 +43,14 @@ class EventOut(BaseModel):
     address: str = Field(None, description='Адрес слёта')
     latitude: float = Field(None, description='Широта места слёта')
     longitude: float = Field(None, description='Долгота места слёта')
-    logo: UploadFile = File(None, description='Лого слёта')
 
     class Config:
         orm_mode = True
+
+
+class FoundEvent(BaseModel):
+    event: EventOut
+    union: Union
 
 
 class EventIn(BaseModel):

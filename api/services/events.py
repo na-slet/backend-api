@@ -1,6 +1,6 @@
 import sqlalchemy
 import os
-from migrations.database.models import Users, Events, Participations
+from migrations.database.models import Users, Events, Participations, Unions
 import hashlib
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
 
@@ -14,8 +14,8 @@ from api.utils.formatter import combine_models
 from api.schemas.events import EventSearch, EventOut, EventIn, PaymentPhoto
 
 
-async def search_events(event_search: EventSearch, session: AsyncSession) -> list[Events]:
-    query = select(Events).where(and_(
+async def search_events(event_search: EventSearch, session: AsyncSession) -> list[(Events, Unions)]:
+    query = select(Events, Unions).join(Unions, Events.union_id == Unions.id, isouter=True).where(and_(
         Events.reg_end_date > event_search.reg_start_date if event_search.reg_start_date else True,
         Events.reg_end_date > event_search.reg_end_date if event_search.reg_end_date else True,
         Events.start_date > event_search.start_date if event_search.start_date else True,
@@ -23,7 +23,7 @@ async def search_events(event_search: EventSearch, session: AsyncSession) -> lis
         Events.category_type > event_search.category_type if event_search.category_type else True,
         Events.event_type > event_search.event_type if event_search.event_type else True
     ))
-    events = (await session.execute(query)).scalars().all()
+    events = (await session.execute(query)).all()
     return events
 
 
