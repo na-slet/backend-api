@@ -1,3 +1,4 @@
 [submodule "migrations"]
 	path = migrations
 	url = https://github.com/na-slet/backend-migrations
+	branch = main
