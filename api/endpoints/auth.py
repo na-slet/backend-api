@@ -37,14 +37,20 @@ async def authenticate_user_if_present_otherwise_register(
     return token
 
 
-@auth_router.post("/user/register", response_model=SuccessfullResponse)
+@auth_router.post("/user/register", response_model=TokenOut)
 async def register_new_user(
     session: AsyncSession = Depends(get_session),
     user_register: UserRegister = Depends()
-) -> SuccessfullResponse:
+) -> TokenOut:
+    user_login = UserLoginBasic(identity=user_register.email, password=user_register.password)
     user_register.password = get_password_hash(user_register.password)
     await add_new_user(user_register, CredentialTypes.BASIC, session)
-    return SuccessfullResponse()
+    credential = await get_user_by_email_or_phone(user_login, session)
+    if not verify_password(user_login.password, credential.value):
+        raise ForbiddenException("Wrong password")
+    access_token = create_access_token(data={"sub": user_register.email})
+    token = TokenOut(access_token=access_token, token_type="bearer")
+    return token
 
 
 @auth_router.post("/user/login", response_model=TokenOut)
