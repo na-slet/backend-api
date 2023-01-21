@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, and_, or_, insert
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
+from api.utils.formatter import combine_models
 from api.schemas.events import EventSearch, EventOut, EventIn, PaymentPhoto
 
 
@@ -26,8 +27,8 @@ async def search_events(event_search: EventSearch, session: AsyncSession) -> lis
     return events
 
 
-async def get_participations(identity: str, session: AsyncSession) -> Users:
-    query = select(Events, Participations.participation_stage).join(
+async def get_participations(identity: str, session: AsyncSession) -> list[(Events, Participations)]:
+    query = select(Events, Participations).join(
         Participations, Events.id == Participations.event_id
     ).join(
         Users, Participations.user_id == Users.id
@@ -37,8 +38,7 @@ async def get_participations(identity: str, session: AsyncSession) -> Users:
             Users.phone == identity
         )
     )
-    participations = (await session.execute(query)).scalars().all()
-    return participations
+    return (await session.execute(query)).all()
 
 
 async def user_participate(event_in: EventIn, user: Users, session: AsyncSession) -> None:

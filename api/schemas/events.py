@@ -56,8 +56,14 @@ class PaymentPhoto(BaseModel):
     payment: UploadFile = File(None, description='Скрин об оплате')
 
 
-class UserParticipation(EventOut):
-    stage: ParticipationStages = Field(None, description='Стадия принятия на слёт')
+class Participation(BaseModel):
+    participation_stage: ParticipationStages = Field(None, description='Стадия принятия на слёт')
+    payment_id: str = Field(None, description='Скрин об оплате')
 
     class Config:
         orm_mode = True
+
+
+class UserParticipation(BaseModel):
+    participation: Participation
+    event: EventOut

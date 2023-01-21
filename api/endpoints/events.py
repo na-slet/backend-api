@@ -12,7 +12,7 @@ from migrations.database.connection.session import get_session
 from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
-from api.schemas.events import EventOut, EventSearch, PaymentPhoto, UserParticipation, EventIn
+from api.schemas.events import EventOut, EventSearch, PaymentPhoto, UserParticipation, EventIn, Participation
 from api.services.events import search_events, get_participations, user_participate, user_payment_send
 from api.utils.formatter import serialize_models
 
@@ -35,7 +35,13 @@ async def get_user_participation(
     identity: str = Depends(get_user_identity)
 ) -> list[EventOut]:
     participations = await get_participations(identity, session)
-    return serialize_models(participations, UserParticipation)
+    result = list()
+    for el in participations:
+        event, participation = el
+        event, participation = EventOut.from_orm(event), Participation.from_orm(participation)
+        result.append(UserParticipation(event=event, participation=participation))
+    return result
+
 
 
 @event_router.post('/event', response_model=SuccessfullResponse)
