@@ -37,6 +37,7 @@ class UserOut(BaseModel):
     gender: Genders = Field(None, description='Пол пользователя')
     phone: str = Field(None, description='Телефон пользователя')
     parent_phone: str = Field(None, description='Телефон родителя')
+    parent_fio: str = Field(None, description='ФИО родителя')
     parent_first_name: str = Form(None, description='Имя родителя')
     parent_middle_name: str = Form(None, description='Отчество родителя')
     parent_last_name: str = Form(None, description='Фамилия родителя')
