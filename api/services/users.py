@@ -38,9 +38,18 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
         fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
         with open(fname, mode='wb+') as f:
             f.write(data)
+    if user_profile.parent_fio:
+        try:
+            last_name,first_name,middle_name = user_profile.parent_fio.split()
+            user_profile.parent_last_name = last_name
+            user_profile.parent_middle_name = middle_name
+            user_profile.parent_first_name = first_name
+        except Exception as e:
+            raise BadRequest('Parent fio should consist of last_name, first_name, middle_name',e) from e
     try:
         query = update(Users).values(
             first_name=func.coalesce(user_profile.first_name, Users.first_name),
+            middle_name=func.coalesce(user_profile.middle_name, Users.middle_name),
             last_name=func.coalesce(user_profile.last_name, Users.last_name),
             gender=func.coalesce(user_profile.gender, Users.gender),
             phone=func.coalesce(user_profile.phone, Users.phone),

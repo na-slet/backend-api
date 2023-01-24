@@ -36,4 +36,6 @@ async def get_user(
     identity: str = Depends(get_user_identity)
 ) -> UserOut:
     user = await get_user_by_identity(identity, session)
-    return UserOut.from_orm(user)
+    user_out = UserOut.from_orm(user)
+    user_out.parent_fio = f"{user_out.parent_last_name} {user_out.parent_first_name} {user_out.parent_middle_name}"
+    return user_out
