@@ -41,6 +41,7 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
     try:
         query = update(Users).values(
             first_name=func.coalesce(user_profile.first_name, Users.first_name),
+            middle_name=func.coalesce(user_profile.middle_name, Users.middle_name),
             last_name=func.coalesce(user_profile.last_name, Users.last_name),
             gender=func.coalesce(user_profile.gender, Users.gender),
             phone=func.coalesce(user_profile.phone, Users.phone),
