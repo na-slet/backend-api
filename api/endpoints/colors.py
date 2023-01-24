@@ -1,4 +1,5 @@
 from uuid import UUID
+from enum import Enum
 from fastapi import APIRouter, Form, Body
 from fastapi.param_functions import Depends
 from fastapi.security import OAuth2PasswordRequestForm
@@ -13,18 +14,27 @@ from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.schemas.auth import UserRegister, UserLoginBasic
 from api.exceptions.common import BadRequest
-from api.schemas.colors import ColorVariant, Color
+from api.schemas.colors import ColorStage, Color, ColorVariant, ColorStages
 from migrations.database.models.events import LogoVariant
+from migrations.database.models.participations import ParticipationStages
+
 
 color_router = APIRouter(tags=["Цветовые вариации"])
 
 
 @color_router.get("/colors", response_model=list[Color])
 async def get_color_by_variant(
-    color_variant: ColorVariant = Depends(),
+    color_stage: ColorStage = Depends(),
     session: AsyncSession = Depends(get_session),
 ) -> list[Color]:
-    color = color_variant.variant.value.lower()
+    stage_to_color = {
+        ColorStages.NOT_PARTICIPATED: ColorVariant.ORANGE,
+        ColorStages.PAYMENT_PENDING: ColorVariant.YELLOW,
+        ColorStages.PAYMENT_NEEDED: ColorVariant.RED,
+        ColorStages.APPROVED: ColorVariant.GREEN,
+        ColorStages.DECLINED: ColorVariant.GRAY
+    }
+    color = stage_to_color[color_stage.variant.value].lower()
     return [
         Color(type=LogoVariant.SCOUT, file_id=f'static/1-{color}.png'),
         Color(type=LogoVariant.CAMP, file_id=f'static/2-{color}.png'),

@@ -8,10 +8,18 @@ from migrations.database.models.events import LogoVariant
 from migrations.database.models.events import ColorVariant
 
 
+class ColorStages(str, Enum):
+    NOT_PARTICIPATED = 'NOT_PARTICIPATED'
+    PAYMENT_NEEDED: str = "PAYMENT_NEEDED"
+    PAYMENT_PENDING: str = "PAYMENT_PENDING"
+    APPROVED: str = "APPROVED"
+    DECLINED: str = "DECLINED"
+
+
 class Color(BaseModel):
     type: LogoVariant = Field(None, description='Тип изображения')
     file_id: str = Field(None, description='Ссылка на изображение')
 
 
-class ColorVariant(BaseModel):
-    variant: ColorVariant = Field(..., description='Вариация цвета')
+class ColorStage(BaseModel):
+    variant: ColorStages = Field(..., description='Вариация цвета')

@@ -9,6 +9,7 @@ from migrations.database.models.users import Genders
 
 class UserProfile(BaseModel):
     first_name: str = Form(None, description='Имя пользователя')
+    middle_name: str = Form(None, description='Отчество пользователя')
     last_name: str = Form(None, description='Фамилия пользователя')
     gender: Genders = Form(None, description='Пол пользователя')
     phone: str = Form(None, description='Телефон пользователя')
@@ -30,6 +31,7 @@ class UserProfile(BaseModel):
 
 class UserOut(BaseModel):
     first_name: str = Field(None, description='Имя пользователя')
+    middle_name: str = Field(None, description='Отчество пользователя')
     last_name: str = Field(None, description='Фамилия пользователя')
     gender: Genders = Field(None, description='Пол пользователя')
     phone: str = Field(None, description='Телефон пользователя')
