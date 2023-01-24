@@ -22,7 +22,7 @@ user_router = APIRouter(tags=["Функции пользователей"])
 
 @user_router.put("/user", response_model=SuccessfullResponse)
 async def update_user(
-    user_profile: UserProfile = Depends(),
+    user_profile: UserProfile,
     identity: str = Depends(get_user_identity),
     session: AsyncSession = Depends(get_session),
 ) -> SuccessfullResponse:
