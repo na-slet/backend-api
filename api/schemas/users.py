@@ -14,6 +14,7 @@ class UserProfile(BaseModel):
     gender: Genders = Form(None, description='Пол пользователя')
     phone: str = Form(None, description='Телефон пользователя')
     parent_phone: str = Form(None, description='Телефон родителя')
+    parent_fio: str = Form(None, description='ФИО родителя')
     parent_first_name: str = Form(None, description='Имя родителя')
     parent_middle_name: str = Form(None, description='Отчество родителя')
     parent_last_name: str = Form(None, description='Фамилия родителя')
