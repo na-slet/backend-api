@@ -1,6 +1,7 @@
 import sqlalchemy
 import os
 import hashlib
+from fastapi import File
 from migrations.database.models import Users, Credentials
 from migrations.database.models.credentials import CredentialTypes
 
@@ -30,11 +31,11 @@ async def get_user_by_identity(identity: str, session: AsyncSession) -> Users:
         raise InternalServerError(e) from e
 
 
-async def update_user_profile(user_profile: UserProfile, user: Users, session: AsyncSession) -> None:
+async def update_user_profile(user_profile: UserProfile, avatar: File, user: Users, session: AsyncSession) -> None:
     fname = None
-    if user_profile.avatar:
-        data = user_profile.avatar.file.read()
-        filetype = os.path.splitext(user_profile.avatar.filename)[-1]
+    if avatar:
+        data = avatar.file.read()
+        filetype = os.path.splitext(avatar.filename)[-1]
         fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
         with open(fname, mode='wb+') as f:
             f.write(data)

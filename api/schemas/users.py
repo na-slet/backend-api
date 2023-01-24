@@ -20,7 +20,6 @@ class UserProfile(BaseModel):
     parent_last_name: str = Form(None, description='Фамилия родителя')
     parent_email: str = Form(None, description='Email родителя')
     email: str = Form(None, description='Почта пользователя')
-    avatar: UploadFile = File(None, description='Аватарка пользователя')
     city: str = Form(None, description='Город пользователя')
     tg_link: str = Form(None, description='Ссылка на Telegram пользователя')
     birth_date: date = Form(None, description='Дата рождения пользователя')
