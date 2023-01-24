@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import Optional
 from fastapi import APIRouter, Form, Body, File, UploadFile
 from fastapi.param_functions import Depends
 from fastapi.security import OAuth2PasswordRequestForm
@@ -21,13 +22,12 @@ user_router = APIRouter(tags=["Функции пользователей"])
 
 @user_router.put("/user", response_model=SuccessfullResponse)
 async def update_user(
-    user_profile: UserProfile,
-    avatar: UploadFile = File(None, description='Аватарка пользователя'),
+    user_profile: UserProfile = Depends(),
     identity: str = Depends(get_user_identity),
     session: AsyncSession = Depends(get_session),
 ) -> SuccessfullResponse:
     user = await get_user_by_identity(identity, session)
-    await update_user_profile(user_profile,avatar,user,session)
+    await update_user_profile(user_profile,user,session)
     return SuccessfullResponse()
 
 
