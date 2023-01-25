@@ -28,6 +28,7 @@ class EventOut(BaseModel):
     name: str = Field(None, description='Название слёта')
     description: str = Field(None, description='Описание слёта')
     short_description: str = Field(None, description='Короткое описание слёта')
+    price: float = Field(None, description='Цена участия на слёте')
     logo_variant: LogoVariant = Field(None, description='Вариант логотип')
     city: str = Field(None, description='Локация слёта')
     reg_end_date: datetime = Field(None, description='Окончание регистрации')
