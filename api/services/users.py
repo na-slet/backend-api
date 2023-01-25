@@ -1,6 +1,7 @@
 import sqlalchemy
 import os
 import hashlib
+from fastapi import File, UploadFile
 from migrations.database.models import Users, Credentials
 from migrations.database.models.credentials import CredentialTypes
 
@@ -31,13 +32,13 @@ async def get_user_by_identity(identity: str, session: AsyncSession) -> Users:
 
 
 async def update_user_profile(user_profile: UserProfile, user: Users, session: AsyncSession) -> None:
-    fname = None
-    if user_profile.avatar:
-        data = user_profile.avatar.file.read()
-        filetype = os.path.splitext(user_profile.avatar.filename)[-1]
-        fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
-        with open(fname, mode='wb+') as f:
-            f.write(data)
+    # fname = None
+    # if user_profile.avatar:
+    #     data = user_profile.avatar.file.read()
+    #     filetype = os.path.splitext(user_profile.avatar.filename)[-1]
+    #     fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
+    #     with open(fname, mode='wb+') as f:
+    #         f.write(data)
     if user_profile.parent_fio:
         try:
             last_name,first_name,middle_name = user_profile.parent_fio.split()
@@ -59,7 +60,7 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
             parent_last_name=func.coalesce(user_profile.parent_last_name, Users.parent_last_name),
             parent_email=func.coalesce(user_profile.parent_email, Users.parent_email),
             email=func.coalesce(user_profile.email, Users.email),
-            avatar_id=func.coalesce(fname, Users.avatar_id),
+            # avatar_id=func.coalesce(fname, Users.avatar_id),
             city=func.coalesce(user_profile.city, Users.city),
             tg_link=func.coalesce(user_profile.tg_link, Users.tg_link),
             union_id=func.coalesce(user_profile.union_id, Users.union_id),

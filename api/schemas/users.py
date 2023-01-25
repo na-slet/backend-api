@@ -1,4 +1,4 @@
-
+from typing import Optional
 from uuid import UUID
 from enum import Enum
 from datetime import date
@@ -20,10 +20,10 @@ class UserProfile(BaseModel):
     parent_last_name: str = Form(None, description='Фамилия родителя')
     parent_email: str = Form(None, description='Email родителя')
     email: str = Form(None, description='Почта пользователя')
-    avatar: UploadFile = File(None, description='Аватарка пользователя')
     city: str = Form(None, description='Город пользователя')
     tg_link: str = Form(None, description='Ссылка на Telegram пользователя')
     birth_date: date = Form(None, description='Дата рождения пользователя')
+    # avatar: Optional[UploadFile] = File(None, description='Аватарка пользователя')
     union_id: UUID = Form(None, description='UUID объединения')
 
     class Config:
