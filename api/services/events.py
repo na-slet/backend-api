@@ -1,6 +1,7 @@
 import sqlalchemy
 import os
 from migrations.database.models import Users, Events, Participations, Unions
+from migrations.database.models.participations import ParticipationStages
 import hashlib
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
 
@@ -55,18 +56,21 @@ async def user_participate(event_in: EventIn, user: Users, session: AsyncSession
 
 
 async def user_payment_send(payment: PaymentPhoto, user: Users, session: AsyncSession) -> None:
-    data = payment.payment.file.read()
-    filetype = os.path.splitext(payment.payment.filename)[-1]
-    fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
-    with open(fname, mode='wb+') as f:
-        f.write(data)
+    fname = None
+    if payment.payment: # TODO: заставить влада кидать фотки
+        data = payment.payment.file.read()
+        filetype = os.path.splitext(payment.payment.filename)[-1]
+        fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
+        with open(fname, mode='wb+') as f:
+            f.write(data)
     try:
         query = update(Participations).values(
+            participation_stage=ParticipationStages.PAYMENT_PENDING,
             payment_id=fname
-        ).where(
+        ).where(and_(
             Participations.user_id == str(user.id),
             Participations.event_id == str(payment.event_id),
-        )
+        ))
         await session.execute(query)
         await session.commit()
     except IntegrityError as e:

@@ -1,8 +1,11 @@
+from datetime import datetime
 from uuid import UUID
+
+import pytz
 from fastapi import APIRouter, Form, Body
 from fastapi.param_functions import Depends
 from fastapi.security import OAuth2PasswordRequestForm
-
+from pytz import UTC
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.utils.authentication import create_access_token, get_password_hash, verify_password, get_user_identity
@@ -13,10 +16,11 @@ from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.services.users import get_user_by_identity, update_user_profile
 from api.schemas.unions import Union
+from api.schemas.events import UserRequiredAdult, UserRequiredChild
 from api.schemas.events import EventOut, FoundEvent, EventSearch, PaymentPhoto, UserParticipation, EventIn, Participation
 from api.services.events import search_events, get_participations, user_participate, user_payment_send
 from api.utils.formatter import serialize_models
-
+from api.exceptions.common import BadRequest
 
 event_router = APIRouter(tags=["Функции слётов"])
 
@@ -56,13 +60,20 @@ async def participate_in_event(
     session: AsyncSession = Depends(get_session),
 ) -> SuccessfullResponse:
     user = await get_user_by_identity(identity, session)
+    try:
+        if user.birth_date and (datetime.now(tz=UTC) - user.birth_date).days < 18*365:
+            UserRequiredChild.from_orm(user)
+        else:
+            UserRequiredAdult.from_orm(user)
+    except Exception as e:
+        raise BadRequest('Profile is not completely filled', e) from e
     await user_participate(event_in, user, session)
     return SuccessfullResponse()
 
 
 @event_router.post('/user/event/payment', response_model=SuccessfullResponse)
 async def send_payment_photo(
-    payment: PaymentPhoto,
+    payment: PaymentPhoto = Depends(),
     identity: str = Depends(get_user_identity),
     session: AsyncSession = Depends(get_session),
 ) -> SuccessfullResponse:

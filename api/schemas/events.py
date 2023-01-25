@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from migrations.database.models.participations import ParticipationStages
 from migrations.database.models.events import CategoryType, EventType, LogoVariant
 from api.schemas.unions import Union
+from api.configs.get_settings import get_fastapi_settings
 
 
 class EventSearch(BaseModel):
@@ -70,6 +71,29 @@ class Participation(BaseModel):
     class Config:
         orm_mode = True
 
+
+class UserRequiredAdult(BaseModel):
+    first_name: str = Field(..., description='Имя пользователя')
+    middle_name: str = Field(..., description='Отчество пользователя')
+    last_name: str = Field(..., description='Фамилия пользователя')
+    phone: str = Field(..., description='Телефон пользователя')
+    email: str = Field(..., description='Почта пользователя')
+    city: str = Field(..., description='Город пользователя')
+    birth_date: date = Field(..., description='Дата рождения пользователя')
+    union_id: UUID = Field(..., description='UUID объединения')
+
+    class Config:
+        orm_mode = True
+
+
+class UserRequiredChild(UserRequiredAdult):
+    parent_phone: str = Field(..., description='Телефон родителя')
+    parent_first_name: str = Field(..., description='Имя родителя')
+    parent_middle_name: str = Field(..., description='Отчество родителя')
+    parent_last_name: str = Field(..., description='Фамилия родителя')
+
+    class Config:
+        orm_mode = True
 
 class UserParticipation(BaseModel):
     participation: Participation
