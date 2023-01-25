@@ -39,7 +39,7 @@ async def search_for_events(
 async def get_user_participation(
     session: AsyncSession = Depends(get_session),
     identity: str = Depends(get_user_identity)
-) -> list[EventOut]:
+) -> list[UserParticipation]:
     participations = await get_participations(identity, session)
     result = list()
     for el in participations:
