@@ -14,7 +14,7 @@ from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.schemas.auth import UserRegister, UserLoginBasic
 from api.exceptions.common import BadRequest
-from api.schemas.colors import ColorStage, Color, ColorVariant, ColorStages
+from api.schemas.colors import ColorStage, Color, ColorStages
 from migrations.database.models.events import LogoVariant
 from migrations.database.models.participations import ParticipationStages
 
