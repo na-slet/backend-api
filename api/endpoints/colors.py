@@ -14,7 +14,7 @@ from migrations.database.models.credentials import CredentialTypes
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.schemas.auth import UserRegister, UserLoginBasic
 from api.exceptions.common import BadRequest
-from api.schemas.colors import ColorStage, Color, ColorStages
+from api.schemas.colors import ColorStage, Color, ColorStages, ColorVariants
 from migrations.database.models.events import LogoVariant
 from migrations.database.models.participations import ParticipationStages
 
@@ -28,11 +28,11 @@ async def get_color_by_variant(
     session: AsyncSession = Depends(get_session),
 ) -> list[Color]:
     stage_to_color = {
-        ParticipationStages.NOT_PARTICIPATED: ColorVariant.ORANGE,
-        ParticipationStages.PAYMENT_PENDING: ColorVariant.YELLOW,
-        ParticipationStages.PAYMENT_NEEDED: ColorVariant.RED,
-        ParticipationStages.APPROVED: ColorVariant.GREEN,
-        ParticipationStages.DECLINED: ColorVariant.GRAY
+        ParticipationStages.NOT_PARTICIPATED: ColorVariants.ORANGE,
+        ParticipationStages.PAYMENT_PENDING: ColorVariants.YELLOW,
+        ParticipationStages.PAYMENT_NEEDED: ColorVariants.RED,
+        ParticipationStages.APPROVED: ColorVariants.GREEN,
+        ParticipationStages.DECLINED: ColorVariants.GRAY
     }
     color = stage_to_color[color_stage.stage.value].lower()
     return [

@@ -8,6 +8,13 @@ from migrations.database.models.events import LogoVariant
 from migrations.database.models.participations import ParticipationStages
 
 
+class ColorVariants(str, Enum):
+    RED = "RED"
+    ORANGE = "ORANGE"
+    YELLOW = "YELLOW"
+    GREEN = "GREEN"
+    GRAY = "GRAY"
+
 class ColorStages(str, Enum):
     NOT_PARTICIPATED = 'NOT_PARTICIPATED'
     PAYMENT_NEEDED: str = "PAYMENT_NEEDED"
