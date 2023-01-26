@@ -21,6 +21,7 @@ from api.schemas.events import EventOut, FoundEvent, EventSearch, PaymentPhoto, 
 from api.services.events import search_events, get_participations, user_participate, user_payment_send
 from api.utils.formatter import serialize_models
 from api.exceptions.common import BadRequest
+from migrations.database.models.participations import ParticipationStages
 
 event_router = APIRouter(tags=["Функции слётов"])
 
@@ -37,6 +38,7 @@ async def search_for_events(
     for el in events:
         event, union, participation = el
         event, union, participation = EventOut.from_orm(event), Union.from_orm(union), Participation.from_orm(participation)
+        participation.participation_stage = participation.participation_stage or ParticipationStages.NOT_PARTICIPATED
         result.append(FoundEvent(event=event, union=union, participation=participation))
     return result
 

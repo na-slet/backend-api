@@ -5,7 +5,7 @@ from datetime import datetime, date
 from fastapi import Depends, File, UploadFile, Form
 from pydantic import BaseModel, Field
 from migrations.database.models.events import LogoVariant
-from migrations.database.models.events import ColorVariant
+from migrations.database.models.participations import ParticipationStages
 
 
 class ColorStages(str, Enum):
@@ -22,4 +22,4 @@ class Color(BaseModel):
 
 
 class ColorStage(BaseModel):
-    variant: ColorStages = Field(..., description='Вариация цвета')
+    stage: ParticipationStages = Field(..., description='Стадия участия')

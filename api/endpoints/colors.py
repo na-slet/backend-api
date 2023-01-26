@@ -28,13 +28,13 @@ async def get_color_by_variant(
     session: AsyncSession = Depends(get_session),
 ) -> list[Color]:
     stage_to_color = {
-        ColorStages.NOT_PARTICIPATED: ColorVariant.ORANGE,
-        ColorStages.PAYMENT_PENDING: ColorVariant.YELLOW,
-        ColorStages.PAYMENT_NEEDED: ColorVariant.RED,
-        ColorStages.APPROVED: ColorVariant.GREEN,
-        ColorStages.DECLINED: ColorVariant.GRAY
+        ParticipationStages.NOT_PARTICIPATED: ColorVariant.ORANGE,
+        ParticipationStages.PAYMENT_PENDING: ColorVariant.YELLOW,
+        ParticipationStages.PAYMENT_NEEDED: ColorVariant.RED,
+        ParticipationStages.APPROVED: ColorVariant.GREEN,
+        ParticipationStages.DECLINED: ColorVariant.GRAY
     }
-    color = stage_to_color[color_stage.variant.value].lower()
+    color = stage_to_color[color_stage.stage.value].lower()
     return [
         Color(type=LogoVariant.SCOUT, file_id=f'static/1-{color}.png'),
         Color(type=LogoVariant.CAMP, file_id=f'static/2-{color}.png'),
