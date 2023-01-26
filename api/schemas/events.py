@@ -1,4 +1,4 @@
-
+from typing import Optional
 from uuid import UUID
 from enum import Enum
 from datetime import datetime, date
@@ -50,11 +50,6 @@ class EventOut(BaseModel):
         orm_mode = True
 
 
-class FoundEvent(BaseModel):
-    event: EventOut
-    union: Union
-
-
 class EventIn(BaseModel):
     id: UUID = Field(..., description='UUID слёта')
 
@@ -70,6 +65,12 @@ class Participation(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class FoundEvent(BaseModel):
+    event: EventOut
+    union: Union
+    participation: Optional[Participation]
 
 
 class UserRequiredAdult(BaseModel):

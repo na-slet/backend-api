@@ -29,13 +29,15 @@ event_router = APIRouter(tags=["Функции слётов"])
 async def search_for_events(
     event_search: EventSearch = Depends(),
     session: AsyncSession = Depends(get_session),
+    identity: str = Depends(get_user_identity)
 ) -> list[FoundEvent]:
-    events = await search_events(event_search, session)
+    user = await get_user_by_identity(identity, session)
+    events = await search_events(event_search, user, session)
     result = list()
     for el in events:
-        event, union = el
-        event, union = EventOut.from_orm(event), Union.from_orm(union)
-        result.append(FoundEvent(event=event, union=union))
+        event, union, participation = el
+        event, union, participation = EventOut.from_orm(event), Union.from_orm(union), Participation.from_orm(participation)
+        result.append(FoundEvent(event=event, union=union, participation=participation))
     return result
 
 

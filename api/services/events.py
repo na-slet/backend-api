@@ -9,21 +9,30 @@ from api.schemas.users import UserProfile
 from api.schemas.common import TokenIn
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, and_, or_, insert
+from sqlalchemy.orm import aliased
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from api.utils.formatter import combine_models
 from api.schemas.events import EventSearch, EventOut, EventIn, PaymentPhoto
 
 
-async def search_events(event_search: EventSearch, session: AsyncSession) -> list[(Events, Unions)]:
-    query = select(Events, Unions).join(Unions, Events.union_id == Unions.id, isouter=True).where(and_(
-        Events.reg_end_date > event_search.reg_start_date if event_search.reg_start_date else True,
-        Events.reg_end_date > event_search.reg_end_date if event_search.reg_end_date else True,
-        Events.start_date > event_search.start_date if event_search.start_date else True,
-        Events.end_date > event_search.end_date if event_search.end_date else True,
-        Events.category_type > event_search.category_type if event_search.category_type else True,
-        Events.event_type > event_search.event_type if event_search.event_type else True
-    ))
+async def search_events(event_search: EventSearch, user: Users, session: AsyncSession) -> list[(Events, Unions)]:
+    subquery = select(Participations).where(and_(
+        Participations.user_id == user.id
+    )).limit(1).cte()
+    subquery = aliased(Participations, subquery)
+    query = select(Events, Unions, subquery). \
+        join(Unions, Events.union_id == Unions.id, isouter=True). \
+        join(subquery, Events.id == subquery.event_id, isouter=True). \
+        where(and_(
+            Events.reg_end_date > event_search.reg_start_date if event_search.reg_start_date else True,
+            Events.reg_end_date > event_search.reg_end_date if event_search.reg_end_date else True,
+            Events.start_date > event_search.start_date if event_search.start_date else True,
+            Events.end_date > event_search.end_date if event_search.end_date else True,
+            Events.category_type > event_search.category_type if event_search.category_type else True,
+            Events.event_type > event_search.event_type if event_search.event_type else True
+        ))
+        # group_by(Events.id, Unions.id, subquery.id, subquery.user_id, subquery.event_id, subquery.participation_stage, subquery.payment_id, subquery.created_at)
     events = (await session.execute(query)).all()
     return events
 
