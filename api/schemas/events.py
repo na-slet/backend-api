@@ -88,9 +88,7 @@ class UserRequiredAdult(BaseModel):
 
 class UserRequiredChild(UserRequiredAdult):
     parent_phone: str = Field(..., description='Телефон родителя')
-    parent_first_name: str = Field(..., description='Имя родителя')
-    parent_middle_name: str = Field(..., description='Отчество родителя')
-    parent_last_name: str = Field(..., description='Фамилия родителя')
+    parent_fio: str = Field(..., description='ФИО родителя')
 
     class Config:
         orm_mode = True
