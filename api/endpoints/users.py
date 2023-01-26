@@ -38,7 +38,4 @@ async def get_user(
 ) -> UserOut:
     user = await get_user_by_identity(identity, session)
     user_out = UserOut.from_orm(user)
-    user_out.parent_fio = None
-    if user_out.parent_first_name and user.parent_middle_name and user.parent_last_name:
-        user_out.parent_fio = f"{user_out.parent_last_name} {user_out.parent_first_name} {user_out.parent_middle_name}"
     return user_out
