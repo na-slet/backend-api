@@ -39,14 +39,6 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
     #     fname = f'static/{hashlib.sha224(data).hexdigest()}{filetype}'
     #     with open(fname, mode='wb+') as f:
     #         f.write(data)
-    if user_profile.parent_fio:
-        try:
-            last_name,first_name,middle_name = user_profile.parent_fio.split()
-            user_profile.parent_last_name = last_name
-            user_profile.parent_middle_name = middle_name
-            user_profile.parent_first_name = first_name
-        except Exception as e:
-            raise BadRequest('Parent fio should consist of last_name, first_name, middle_name',e) from e
     try:
         query = update(Users).values(
             first_name=func.coalesce(user_profile.first_name, Users.first_name),
@@ -55,9 +47,7 @@ async def update_user_profile(user_profile: UserProfile, user: Users, session: A
             gender=func.coalesce(user_profile.gender, Users.gender),
             phone=func.coalesce(user_profile.phone, Users.phone),
             parent_phone=func.coalesce(user_profile.parent_phone, Users.parent_phone),
-            parent_first_name=func.coalesce(user_profile.parent_first_name, Users.parent_first_name),
-            parent_middle_name=func.coalesce(user_profile.parent_middle_name, Users.parent_middle_name),
-            parent_last_name=func.coalesce(user_profile.parent_last_name, Users.parent_last_name),
+            parent_fio=func.coalesce(user_profile.parent_fio, Users.parent_fio),
             parent_email=func.coalesce(user_profile.parent_email, Users.parent_email),
             email=func.coalesce(user_profile.email, Users.email),
             # avatar_id=func.coalesce(fname, Users.avatar_id),

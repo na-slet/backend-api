@@ -19,7 +19,7 @@ rebuild:
 	docker build -t na-slet-client-api --no-cache .
 
 build:
-	docker built -t na-slet-client-api .
+	docker build -t na-slet-client-api .
 
 down:
 	docker container stop na-slet-client-api || true
