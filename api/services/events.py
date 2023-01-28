@@ -1,6 +1,7 @@
 import sqlalchemy
 import os
 from migrations.database.models import Users, Events, Participations, Unions
+from migrations.database.models.events import Visibility
 from migrations.database.models.participations import ParticipationStages
 import hashlib
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
@@ -30,7 +31,8 @@ async def search_events(event_search: EventSearch, user: Users, session: AsyncSe
             Events.start_date > event_search.start_date if event_search.start_date else True,
             Events.end_date > event_search.end_date if event_search.end_date else True,
             Events.category_type > event_search.category_type if event_search.category_type else True,
-            Events.event_type > event_search.event_type if event_search.event_type else True
+            Events.event_type > event_search.event_type if event_search.event_type else True,
+            Events.visibility == Visibility.PUBLIC
         ))
         # group_by(Events.id, Unions.id, subquery.id, subquery.user_id, subquery.event_id, subquery.participation_stage, subquery.payment_id, subquery.created_at)
     events = (await session.execute(query)).all()
