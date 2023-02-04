@@ -26,4 +26,4 @@ down:
 
 run-docker:
 	docker container rm na-slet-client-api || true
-	docker run --name  na-slet-client-api -d -p ${FASTAPI_PORT}:${FASTAPI_PORT} --network na-slet-network na-slet-client-api
+	docker run --name  na-slet-client-api -d -p ${FASTAPI_PORT}:${FASTAPI_PORT} --mount source=na-slet-client-static,destination=/code/static --restart always --network na-slet-network na-slet-client-api
