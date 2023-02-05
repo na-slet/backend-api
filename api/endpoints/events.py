@@ -1,27 +1,21 @@
 from datetime import datetime
-from uuid import UUID
 
-import pytz
-from fastapi import APIRouter, Form, Body
+from fastapi import APIRouter
 from fastapi.param_functions import Depends
-from fastapi.security import OAuth2PasswordRequestForm
 from pytz import UTC
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.utils.authentication import create_access_token, get_password_hash, verify_password, get_user_identity
-from api.exceptions.common import ForbiddenException
-from api.schemas.common import SuccessfullResponse, TokenOut, TokenIn
-from migrations.database.connection.session import get_session
-from migrations.database.models.credentials import CredentialTypes
-from api.services.auth import add_new_user, get_user_by_email_or_phone
-from api.services.users import get_user_by_identity, update_user_profile
-from api.schemas.unions import Union
-from api.schemas.events import UserRequiredAdult, UserRequiredChild
-from api.schemas.events import EventOut, FoundEvent, EventSearch, PaymentPhoto, UserParticipation, EventIn, Participation
-from api.services.events import search_events, get_participations, user_participate, user_payment_send
-from api.utils.formatter import serialize_models
 from api.exceptions.common import BadRequest
-from migrations.database.models.participations import ParticipationStages
+from api.schemas.common import SuccessfullResponse
+from api.schemas.events import EventOut, FoundEvent, EventSearch, PaymentPhoto, UserParticipation, EventIn, \
+    Participation
+from api.schemas.events import UserRequiredAdult, UserRequiredChild
+from api.schemas.unions import Union
+from api.services.events import search_events, get_participations, user_participate, user_payment_send
+from api.services.users import get_user_by_identity
+from api.utils.authentication import get_user_identity
+from migrator.connection.session import get_session
+from migrator.models.participations import ParticipationStages
 
 event_router = APIRouter(tags=["Функции слётов"])
 

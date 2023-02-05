@@ -1,12 +1,12 @@
-
-from uuid import UUID
-from enum import Enum
 from datetime import date
-from fastapi import Depends, File, UploadFile, Form
-from pydantic import BaseModel, Field
-from migrations.database.models.users import Genders
-from migrations.database.models.credentials import CredentialTypes
-from migrations.database.models.users import Roles
+from datetime import date
+
+from fastapi import File, UploadFile, Form
+from pydantic import BaseModel
+
+from migrator.models.credentials import CredentialTypes
+from migrator.models.users import Genders
+from migrator.models.users import Roles
 
 
 class UserUpdate(BaseModel):

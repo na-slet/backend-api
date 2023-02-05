@@ -1,18 +1,11 @@
-import sqlalchemy
-import os
-import hashlib
-from fastapi import File, UploadFile
-from migrations.database.models import Users, Credentials
-from migrations.database.models.credentials import CredentialTypes
-
-from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
-
-from api.schemas.users import UserProfile
-from api.schemas.common import TokenIn
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, or_
 from sqlalchemy import func
+from sqlalchemy import select, update, or_
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from api.exceptions.common import NotFoundException, InternalServerError
+from api.schemas.users import UserProfile
+from migrator.models import Users
 
 
 async def get_user_by_identity(identity: str, session: AsyncSession) -> Users:

@@ -1,21 +1,17 @@
-from typing import Optional
-from uuid import UUID
-from fastapi import APIRouter, Form, Body
+from fastapi import APIRouter
 from fastapi.param_functions import Depends
-from fastapi.security import OAuth2PasswordRequestForm
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.utils.authentication import create_access_token, get_password_hash, verify_password, get_user_identity
-from api.exceptions.common import ForbiddenException
-from api.schemas.common import SuccessfullResponse, TokenOut, TokenIn
-from migrations.database.connection.session import get_session
-from api.schemas.events import EventOut, EventIn, UserEventUpdate, EventNew, Participation, UserEventKick, EventInOptional
+from api.schemas.common import SuccessfullResponse
+from api.schemas.events import EventOut, EventIn, UserEventUpdate, EventNew, Participation, UserEventKick, \
+    EventInOptional
 from api.schemas.users import UserOut, UserParticipation
+from api.services.events import get_user_event, get_event_users, get_user_events, create_new_event, delete_event, \
+    update_event, change_participation_status, kick_user_from_participation
 from api.services.users import get_user_by_identity
-from api.services.events import get_user_event, get_event_users, get_user_events, create_new_event, delete_event, update_event, change_participation_status, kick_user_from_participation
+from api.utils.authentication import get_user_identity
 from api.utils.formatter import serialize_models
-
+from migrator.connection.session import get_session
 
 admin_router = APIRouter(tags=["Функции создателя"], prefix='/admin')
 

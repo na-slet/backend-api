@@ -1,11 +1,9 @@
-
-from uuid import UUID
 from enum import Enum
-from datetime import datetime, date
-from fastapi import Depends, File, UploadFile, Form
+
 from pydantic import BaseModel, Field
-from migrations.database.models.events import LogoVariant
-from migrations.database.models.participations import ParticipationStages
+
+from migrator.models.events import LogoVariant
+from migrator.models.participations import ParticipationStages
 
 
 class ColorVariants(str, Enum):
@@ -14,6 +12,7 @@ class ColorVariants(str, Enum):
     YELLOW = "YELLOW"
     GREEN = "GREEN"
     GRAY = "GRAY"
+
 
 class ColorStages(str, Enum):
     NOT_PARTICIPATED = 'NOT_PARTICIPATED'

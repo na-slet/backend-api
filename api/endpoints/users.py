@@ -1,21 +1,13 @@
-from uuid import UUID
-from typing import Optional
-from fastapi import APIRouter, Form, Body, File, UploadFile
+from fastapi import APIRouter
+from fastapi import APIRouter
 from fastapi.param_functions import Depends
-from fastapi.security import OAuth2PasswordRequestForm
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.utils.authentication import create_access_token, get_password_hash, verify_password, get_user_identity
-from api.exceptions.common import ForbiddenException
-from api.schemas.common import SuccessfullResponse, TokenOut, TokenIn
-from migrations.database.connection.session import get_session
-from migrations.database.models.credentials import CredentialTypes
-from api.services.auth import add_new_user, get_user_by_email_or_phone
-from api.services.users import get_user_by_identity, update_user_profile
-from api.schemas.auth import UserUpdate
+from api.schemas.common import SuccessfullResponse
 from api.schemas.users import UserProfile, UserOut
-
+from api.services.users import get_user_by_identity, update_user_profile
+from api.utils.authentication import get_user_identity
+from migrator.connection.session import get_session
 
 user_router = APIRouter(tags=["Функции пользователей"])
 

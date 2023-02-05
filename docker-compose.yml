@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  postgresql:
+    container_name: na-slet-postgresql
+    image: postgres
+    ports:
+      - "5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - na-slet-db-data:/var/lib/postgresql/data
+    networks:
+      - na-slet
+  migrator:
+    container_name: na-slet-migrator
+    build:
+      context: .
+      dockerfile: ./Dockerfile.migrator
+    depends_on:
+      - postgresql
+    networks:
+      - na-slet
+  api:
+    container_name: na-slet-api
+    env_file:
+      - .env
+    ports:
+      - "${FASTAPI_PORT}:${FASTAPI_PORT}"
+    build:
+      context: .
+      dockerfile: ./Dockerfile.api
+    depends_on:
+      - postgresql
+    networks:
+      - na-slet
+    volumes:
+      - na-slet-api-static:/code/static
+    restart: always
+networks:
+  na-slet:
+    name: na-slet-network
+volumes:
+  na-slet-db-data:
+  na-slet-api-static:

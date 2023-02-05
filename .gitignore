@@ -136,3 +136,4 @@ dmypy.json
 /.idea/vcs.xml
 /static/
 /.idea/dataSources.xml
+/static/*

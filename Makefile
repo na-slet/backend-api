@@ -1,7 +1,19 @@
 include .env
 export
 
-ALEMBIC = database
+ALEMBIC = migrator
+
+migrate:
+	cd ${ALEMBIC} && poetry run alembic upgrade head
+
+revision:
+	cd ${ALEMBIC} && poetry run alembic revision --autogenerate
+
+upgrade:
+	cd ${ALEMBIC} && poetry run alembic upgrade +1
+
+downgrade:
+	cd ${ALEMBIC} && poetry run alembic downgrade -1
 
 shell:
 	poetry shell
@@ -12,18 +24,29 @@ prepare:
 run:
 	poetry run uvicorn api.__main__:app --host 0.0.0.0 --port ${FASTAPI_PORT} --log-level critical
 
-clear:
-	docker kill na-slet-client-api || true
+down:
+	docker-compose down || true
 
 rebuild:
-	docker build -t na-slet-client-api --no-cache .
+	docker build --no-cache .
 
 build:
-	docker build -t na-slet-client-api .
+	docker build .
 
-down:
-	docker container stop na-slet-client-api || true
+logs:
+	docker-compose logs
 
-run-docker:
-	docker container rm na-slet-client-api || true
-	docker run --name  na-slet-client-api -d -p ${FASTAPI_PORT}:${FASTAPI_PORT} --mount source=na-slet-client-static,destination=/code/static --restart always --network na-slet-network na-slet-client-api
+postgresql:
+	docker-compose up -d postgresql
+
+migrator:
+	docker-compose up migrator
+
+api:
+	docker-compsoe up -d api
+
+up:
+	docker-compose up -d
+
+open_postgresql:
+	PGPASSWORD=${DB_PASSWORD} docker exec -it na-slet-postgresql psql -h localhost -U ${DB_USERNAME} -d ${DB_NAME}

@@ -1,10 +1,7 @@
 
 from uuid import UUID
-from enum import Enum
-from datetime import date
-from fastapi import Depends, File, UploadFile, Form
+
 from pydantic import BaseModel, Field
-from migrations.database.models.users import Genders
 
 
 class Union(BaseModel):

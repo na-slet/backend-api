@@ -1,33 +1,20 @@
-import sqlalchemy
-import os
-from migrations.database.models import Users, Events, Participations, Unions
-from migrations.database.models.events import Visibility
-from migrations.database.models.participations import ParticipationStages
 import hashlib
-from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
-
-from api.schemas.users import UserProfile
-from api.schemas.common import TokenIn
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, or_, insert
-from sqlalchemy.orm import aliased
-from sqlalchemy import func
-from sqlalchemy.exc import IntegrityError
-from api.utils.formatter import combine_models
-from api.schemas.events import EventSearch, EventOut, EventIn, PaymentPhoto, UserEventUpdate
-
+import os
 from uuid import UUID
 
-from migrations.database.models import Users, Events, Participations
-from migrations.database.models.credentials import CredentialTypes
+from sqlalchemy import func
+from sqlalchemy import select, insert, and_, or_, delete, update
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import aliased
 
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
-
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, and_, or_,delete, update
-from sqlalchemy import func
-from sqlalchemy.exc import IntegrityError
-from api.schemas.events import EventIn, EventNew, UserEvent, EventOut, UserEventKick, EventInOptional
+from api.schemas.events import EventIn, EventNew, EventOut, UserEventKick
+from api.schemas.events import EventSearch, PaymentPhoto, UserEventUpdate
+from migrator.models import Unions
+from migrator.models import Users, Events, Participations
+from migrator.models.events import Visibility
+from migrator.models.participations import ParticipationStages
 
 
 async def get_user_event(user: Users, event: EventIn, session: AsyncSession) -> Events:

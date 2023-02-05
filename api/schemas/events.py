@@ -1,14 +1,14 @@
+from datetime import datetime, date
 from typing import Optional
 from uuid import UUID
-from enum import Enum
-from datetime import datetime, date
-from fastapi import Depends, File, UploadFile, Form
+
+from fastapi import File, UploadFile
 from pydantic import BaseModel, Field
-from migrations.database.models.participations import ParticipationStages
-from migrations.database.models.events import Visibility
-from migrations.database.models.events import CategoryType, EventType, LogoVariant
+
 from api.schemas.unions import Union
-from api.configs.get_settings import get_fastapi_settings
+from migrator.models.events import CategoryType, EventType, LogoVariant
+from migrator.models.events import Visibility
+from migrator.models.participations import ParticipationStages
 
 
 class EventSearch(BaseModel):

@@ -1,19 +1,16 @@
-from uuid import UUID
-from fastapi import APIRouter, Form, Body
+from fastapi import APIRouter
+from fastapi import APIRouter
 from fastapi.param_functions import Depends
-from fastapi.security import OAuth2PasswordRequestForm
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.utils.authentication import create_access_token, get_password_hash, verify_password
-from api.exceptions.common import ForbiddenException
-from api.schemas.common import SuccessfullResponse, TokenOut
-from migrations.database.connection.session import get_session
-from migrations.database.models.credentials import CredentialTypes
-from api.services.auth import add_new_user, get_user_by_email_or_phone
-from api.schemas.auth import UserRegister, UserLoginBasic
 from api.exceptions.common import BadRequest
-
+from api.exceptions.common import ForbiddenException
+from api.schemas.auth import UserRegister, UserLoginBasic
+from api.schemas.common import TokenOut
+from api.services.auth import add_new_user, get_user_by_email_or_phone
+from api.utils.authentication import create_access_token, get_password_hash, verify_password
+from migrator.connection.session import get_session
+from migrator.models.credentials import CredentialTypes
 
 auth_router = APIRouter(tags=["Аутентификация"])
 

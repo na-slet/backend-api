@@ -1,11 +1,12 @@
-from typing import Optional
 from uuid import UUID
-from enum import Enum
 from datetime import date
-from fastapi import Depends, File, UploadFile, Form
-from .events import Participation
+from uuid import UUID
+
+from fastapi import Form
 from pydantic import BaseModel, Field
-from migrations.database.models.users import Genders
+
+from migrator.models.users import Genders
+from .events import Participation
 
 
 class UserProfile(BaseModel):
