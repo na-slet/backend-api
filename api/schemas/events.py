@@ -21,8 +21,13 @@ class EventSearch(BaseModel):
     query: str = Field(None, description='Поисковый запрос')
 
 
+class UserEventUpdate(BaseModel):
+    event_id: UUID
+    user_id: UUID
+    stage: ParticipationStages
+
 class UserEvent(BaseModel):
-    stage: ParticipationStages = Field(..., description='Стадия принятия на слёт')
+    stage: ParticipationStages
 
 
 class EventOut(BaseModel):
@@ -99,3 +104,35 @@ class UserRequiredChild(UserRequiredAdult):
 class UserParticipation(BaseModel):
     participation: Participation
     event: EventOut
+
+class UserEventKick(BaseModel):
+    event_id: UUID
+    user_id: UUID
+
+
+class EventInOptional(BaseModel):
+    id: Optional[UUID]
+
+
+class EventNew(BaseModel):
+    name: str = Field(..., description='Название слёта')
+    description: str = Field(None, description='Описание слёта')
+    short_description: str = Field(None, description='Короткое описание слёта')
+    visibility: Visibility = Field(None, description='Видимость слёта')
+    price: float = Field(None, description='Цена участия на слёте',gt=0)
+    logo_variant: LogoVariant = Field(..., description='Вариант логотипа')
+    city: str = Field(None, description='Локация слёта')
+    reg_end_date: datetime = Field(..., description='Окончание регистрации')
+    start_date: datetime = Field(..., description='Начало слёта')
+    end_date: datetime = Field(..., description='Конец слёта')
+    total_places: int = Field(None, description='Количество мест')
+    url_link: str = Field(None, description='Ссылка на соц. сети')
+    event_type: EventType = Field(..., description='Тип слёта')
+    category_type: CategoryType = Field(..., description='Категория слёта')
+    union_id: UUID = Field(None, description='UUID объединения')
+    min_age: int = Field(None, gt=0, description='Минимальный возраст')
+    max_age: int = Field(None, gt=0, description='Максимальный возраст')
+    address: str = Field(..., description='Адрес слёта')
+    latitude: float = Field(None, description='Широта места слёта')
+    longitude: float = Field(None, description='Долгота места слёта')
+

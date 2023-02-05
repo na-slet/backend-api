@@ -3,6 +3,7 @@ from uuid import UUID
 from enum import Enum
 from datetime import date
 from fastapi import Depends, File, UploadFile, Form
+from .events import Participation
 from pydantic import BaseModel, Field
 from migrations.database.models.users import Genders
 
@@ -45,3 +46,8 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserParticipation(BaseModel):
+    participation: Participation
+    user: UserOut
