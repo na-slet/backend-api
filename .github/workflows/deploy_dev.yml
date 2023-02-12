@@ -6,32 +6,48 @@ on:
       - dev
 
 jobs:
-  Clear:
+  Update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-      - run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
-      - run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; touch .env; make clear-dev'
+      - name: Copy key
+        run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+      - name: Add key to keyring
+        run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
+      - name: Pull latest changes
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; git pull; git submodule update --remote'
+  Clear:
+    runs-on: ubuntu-latest
+    needs: [Update]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy key
+        run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+      - name: Add key to keyring
+        run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
+      - name: Kill services
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; touch .env; make clear-dev'
   Prepare:
     runs-on: ubuntu-latest
     needs: [Clear]
     steps:
       - uses: actions/checkout@v2
-      - run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-      - run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
-      - name: Pull latest changes
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; git pull; git submodule update --remote'
+      - name: Copy key
+        run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+      - name: Add key to keyring
+        run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Set up environment
         run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; echo -e "${{ secrets.ENV_CONTENTS_DEV }}" > .env'
-      - name: Build
+      - name: Build development stand
         run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make build'
   Run:
     runs-on: ubuntu-latest
     needs: [Prepare]
     steps:
       - uses: actions/checkout@v2
-      - run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-      - run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
-      - name: make run-docker
+      - name: Copy key
+        run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+      - name: Add key to keyring
+        run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
+      - name: Start development stand
         run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make server-dev'
