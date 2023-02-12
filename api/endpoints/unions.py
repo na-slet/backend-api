@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.schemas.unions import Union
 from api.services.unions import get_unions
 from api.utils.formatter import serialize_models
-from migrator.connection.session import get_session
+from database.connection.session import get_session
 
 union_router = APIRouter(tags=["Объединения"])
 

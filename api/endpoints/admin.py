@@ -11,7 +11,7 @@ from api.services.events import get_user_event, get_event_users, get_user_events
 from api.services.users import get_user_by_identity
 from api.utils.authentication import get_user_identity
 from api.utils.formatter import serialize_models
-from migrator.connection.session import get_session
+from database.connection.session import get_session
 
 admin_router = APIRouter(tags=["Функции создателя"], prefix='/admin')
 

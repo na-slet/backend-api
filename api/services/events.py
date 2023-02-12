@@ -11,10 +11,10 @@ from sqlalchemy.orm import aliased
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
 from api.schemas.events import EventIn, EventNew, EventOut, UserEventKick
 from api.schemas.events import EventSearch, PaymentPhoto, UserEventUpdate
-from migrator.models import Unions
-from migrator.models import Users, Events, Participations
-from migrator.models.events import Visibility
-from migrator.models.participations import ParticipationStages
+from database.models import Unions
+from database.models import Users, Events, Participations
+from database.models.events import Visibility
+from database.models.participations import ParticipationStages
 
 
 async def get_user_event(user: Users, event: EventIn, session: AsyncSession) -> Events:

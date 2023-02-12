@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.exceptions.common import BadRequest, NotFoundException, InternalServerError
 from api.schemas.auth import UserRegister, UserLoginBasic
-from migrator.models import Users, Credentials
-from migrator.models.credentials import CredentialTypes
+from database.models import Users, Credentials
+from database.models.credentials import CredentialTypes
 
 
 async def add_new_user(user_register: UserRegister, credential_type: str, session: AsyncSession) -> None:

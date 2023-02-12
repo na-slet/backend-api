@@ -6,9 +6,9 @@ from fastapi import File, UploadFile
 from pydantic import BaseModel, Field
 
 from api.schemas.unions import Union
-from migrator.models.events import CategoryType, EventType, LogoVariant
-from migrator.models.events import Visibility
-from migrator.models.participations import ParticipationStages
+from database.models.events import CategoryType, EventType, LogoVariant
+from database.models.events import Visibility
+from database.models.participations import ParticipationStages
 
 
 class EventSearch(BaseModel):

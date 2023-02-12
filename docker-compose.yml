@@ -2,7 +2,7 @@ version: '3.7'
 services:
   postgresql:
     container_name: na-slet-postgresql
-    image: postgres
+    image: postgres # TODO: задать определенную версию
     ports:
       - "5432"
     env_file:

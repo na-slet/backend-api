@@ -1,7 +1,7 @@
 include .env
 export
 
-ALEMBIC = migrator
+ALEMBIC = database
 
 migrate:
 	cd ${ALEMBIC} && poetry run alembic upgrade head
@@ -28,10 +28,10 @@ down:
 	docker-compose down || true
 
 rebuild:
-	docker build --no-cache .
+	docker-compose build --no-cache
 
 build:
-	docker build .
+	docker-compose build
 
 logs:
 	docker-compose logs
@@ -42,11 +42,8 @@ postgresql:
 migrator:
 	docker-compose up migrator
 
-api:
-	docker-compsoe up -d api
-
-up:
-	docker-compose up -d
+server:
+	docker-compose up -d api
 
 open_postgresql:
 	PGPASSWORD=${DB_PASSWORD} docker exec -it na-slet-postgresql psql -h localhost -U ${DB_USERNAME} -d ${DB_NAME}

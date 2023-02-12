@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from migrator.models import Unions
+from database.models import Unions
 
 
 async def get_unions(session: AsyncSession) -> list[Unions]:

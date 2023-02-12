@@ -2,8 +2,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from migrator.models.events import LogoVariant
-from migrator.models.participations import ParticipationStages
+from database.models.events import LogoVariant
+from database.models.participations import ParticipationStages
 
 
 class ColorVariants(str, Enum):

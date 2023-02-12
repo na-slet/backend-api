@@ -1,12 +1,11 @@
 from fastapi import APIRouter
-from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.schemas.colors import ColorStage, Color, ColorVariants
-from migrator.connection.session import get_session
-from migrator.models.events import LogoVariant
-from migrator.models.participations import ParticipationStages
+from database.connection.session import get_session
+from database.models.events import LogoVariant
+from database.models.participations import ParticipationStages
 
 color_router = APIRouter(tags=["Цветовые вариации"])
 

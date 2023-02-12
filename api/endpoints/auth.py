@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,16 +8,16 @@ from api.schemas.auth import UserRegister, UserLoginBasic
 from api.schemas.common import TokenOut
 from api.services.auth import add_new_user, get_user_by_email_or_phone
 from api.utils.authentication import create_access_token, get_password_hash, verify_password
-from migrator.connection.session import get_session
-from migrator.models.credentials import CredentialTypes
+from database.connection.session import get_session
+from database.models.credentials import CredentialTypes
 
 auth_router = APIRouter(tags=["Аутентификация"])
 
 
 @auth_router.post("/user/auth", response_model=TokenOut)
 async def authenticate_user_if_present_otherwise_register(
-    session: AsyncSession = Depends(get_session),
-    user_register: UserRegister = Depends()
+        session: AsyncSession = Depends(get_session),
+        user_register: UserRegister = Depends()
 ) -> TokenOut:
     user_login = UserLoginBasic(identity=user_register.email, password=user_register.password)
     user_register.password = get_password_hash(user_register.password)

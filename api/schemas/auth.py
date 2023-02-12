@@ -1,12 +1,11 @@
 from datetime import date
-from datetime import date
 
 from fastapi import File, UploadFile, Form
 from pydantic import BaseModel
 
-from migrator.models.credentials import CredentialTypes
-from migrator.models.users import Genders
-from migrator.models.users import Roles
+from database.models.credentials import CredentialTypes
+from database.models.users import Genders
+from database.models.users import Roles
 
 
 class UserUpdate(BaseModel):

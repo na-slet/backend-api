@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from fastapi import APIRouter
 from fastapi.param_functions import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,7 +6,7 @@ from api.schemas.common import SuccessfullResponse
 from api.schemas.users import UserProfile, UserOut
 from api.services.users import get_user_by_identity, update_user_profile
 from api.utils.authentication import get_user_identity
-from migrator.connection.session import get_session
+from database.connection.session import get_session
 
 user_router = APIRouter(tags=["Функции пользователей"])
 

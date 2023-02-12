@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.exceptions.common import NotFoundException, InternalServerError
 from api.schemas.users import UserProfile
-from migrator.models import Users
+from database.models import Users
 
 
 async def get_user_by_identity(identity: str, session: AsyncSession) -> Users:

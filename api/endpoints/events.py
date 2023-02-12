@@ -14,17 +14,17 @@ from api.schemas.unions import Union
 from api.services.events import search_events, get_participations, user_participate, user_payment_send
 from api.services.users import get_user_by_identity
 from api.utils.authentication import get_user_identity
-from migrator.connection.session import get_session
-from migrator.models.participations import ParticipationStages
+from database.connection.session import get_session
+from database.models.participations import ParticipationStages
 
 event_router = APIRouter(tags=["Функции слётов"])
 
 
 @event_router.get("/events", response_model=list[FoundEvent])
 async def search_for_events(
-    event_search: EventSearch = Depends(),
-    session: AsyncSession = Depends(get_session),
-    identity: str = Depends(get_user_identity)
+        event_search: EventSearch = Depends(),
+        session: AsyncSession = Depends(get_session),
+        identity: str = Depends(get_user_identity)
 ) -> list[FoundEvent]:
     user = await get_user_by_identity(identity, session)
     events = await search_events(event_search, user, session)

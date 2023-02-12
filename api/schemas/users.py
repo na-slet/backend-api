@@ -1,11 +1,10 @@
-from uuid import UUID
 from datetime import date
 from uuid import UUID
 
 from fastapi import Form
 from pydantic import BaseModel, Field
 
-from migrator.models.users import Genders
+from database.models.users import Genders
 from .events import Participation
 
 
