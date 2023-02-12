@@ -45,5 +45,8 @@ migrator:
 server:
 	docker-compose up -d api
 
+server-dev:
+	docker-compose up -d api-dev
+
 open_postgresql:
 	PGPASSWORD=${DB_PASSWORD} docker exec -it na-slet-postgresql psql -h localhost -U ${DB_USERNAME} -d ${DB_NAME}

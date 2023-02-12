@@ -40,9 +40,26 @@ services:
     volumes:
       - na-slet-api-static:/code/static
     restart: always
+  api-dev:
+    container_name: na-slet-api-dev
+    env_file:
+      - .env
+    ports:
+      - "${FASTAPI_PORT}:${FASTAPI_PORT}"
+    build:
+      context: .
+      dockerfile: ./Dockerfile.api
+    depends_on:
+      - postgresql
+    networks:
+      - na-slet
+    volumes:
+      - na-slet-api-dev-static:/code/static
+    restart: always
 networks:
   na-slet:
     name: na-slet-network
 volumes:
   na-slet-db-data:
   na-slet-api-static:
+  na-slet-api-dev-static:

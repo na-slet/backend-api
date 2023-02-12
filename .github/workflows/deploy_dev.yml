@@ -34,4 +34,4 @@ jobs:
       - run: touch private_key && echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
       - run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: make run-docker
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make server'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make server-dev'
