@@ -59,6 +59,7 @@ services:
 networks:
   na-slet:
     name: na-slet-network
+    external: true
 volumes:
   na-slet-db-data:
   na-slet-api-static:
