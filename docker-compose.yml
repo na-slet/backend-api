@@ -33,8 +33,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.api
-    depends_on:
-      - postgresql
     networks:
       - na-slet
     volumes:
@@ -49,8 +47,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.api
-    depends_on:
-      - postgresql
     networks:
       - na-slet
     volumes:
