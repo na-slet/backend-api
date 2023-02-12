@@ -15,7 +15,7 @@ jobs:
       - name: Add key to keyring
         run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Pull latest changes
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api-dev; git pull; git submodule update --remote'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; git checkout dev; git pull; git submodule update --remote'
   Clear:
     runs-on: ubuntu-latest
     needs: [Update]
@@ -26,7 +26,7 @@ jobs:
       - name: Add key to keyring
         run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Kill services
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api-dev; touch .env; make clear-dev'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; touch .env; make clear-dev'
   Prepare:
     runs-on: ubuntu-latest
     needs: [Clear]
@@ -37,9 +37,9 @@ jobs:
       - name: Add key to keyring
         run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Set up environment
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api-dev; echo -e "${{ secrets.ENV_CONTENTS_DEV }}" > .env'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; echo -e "${{ secrets.ENV_CONTENTS_DEV }}" > .env'
       - name: Build development stand
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api-dev; make build'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make build'
   Run:
     runs-on: ubuntu-latest
     needs: [Prepare]
@@ -50,4 +50,4 @@ jobs:
       - name: Add key to keyring
         run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Start development stand
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api-dev; make server-dev'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; make server-dev'

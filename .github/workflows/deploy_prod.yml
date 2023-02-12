@@ -15,7 +15,7 @@ jobs:
       - name: Add key to keyring
         run: ssh -i private_key -o StrictHostKeyChecking=accept-new deployer@${{ secrets.SSH_HOST }}
       - name: Pull latest changes
-        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; git pull; git submodule update --remote'
+        run: ssh -i private_key deployer@${{ secrets.SSH_HOST }} 'cd ~/na-slet/backend-api; git checkout main; git pull; git submodule update --remote'
   Clear:
     runs-on: ubuntu-latest
     needs: [Update]
