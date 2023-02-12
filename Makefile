@@ -27,6 +27,12 @@ run:
 down:
 	docker-compose down || true
 
+clear:
+	docker-compose kill api || true
+
+clear-dev:
+	docker-compose kill api-dev || true
+
 rebuild:
 	docker-compose build --no-cache
 
